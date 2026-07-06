@@ -25,7 +25,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install yt-dlp huggingface_hub
+        run: pip install huggingface_hub
 
       - name: Run script
         env:
