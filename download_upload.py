@@ -17,7 +17,7 @@ def main():
         sys.exit(1)
 
     print(f"Downloading {url} to {filename}...")
-    subprocess.run(["yt-dlp", url, "-o", filename], check=True)
+    subprocess.run(["yt-dlp", "--referer", "https://iframe.mediadelivery.net/", url, "-o", filename], check=True)
 
     print(f"Uploading {filename} to Hugging Face dataset Sarkoakram/matozed...")
     api = HfApi()
