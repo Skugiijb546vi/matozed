@@ -16,8 +16,8 @@ def main():
         print("HF_TOKEN environment variable is not set!")
         sys.exit(1)
 
-    print(f"Downloading {url} to {filename} with 10 concurrent connections...")
-    subprocess.run(["yt-dlp", "-N", "10", "--referer", "https://iframe.mediadelivery.net/", url, "-o", filename], check=True)
+    print(f"Downloading {url} to {filename} with 50 concurrent connections...")
+    subprocess.run(["yt-dlp", "-N", "50", "--referer", "https://iframe.mediadelivery.net/", url, "-o", filename], check=True)
 
     print(f"Uploading {filename} to Hugging Face dataset Sarkoakram/matozed...")
     api = HfApi()
