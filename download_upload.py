@@ -17,7 +17,7 @@ def main():
         sys.exit(1)
 
     print(f"Downloading {url} to {filename} with 50 concurrent connections...")
-    subprocess.run(["yt-dlp", "-N", "50", "--referer", "https://iframe.mediadelivery.net/", url, "-o", filename], check=True)
+    subprocess.run(["yt-dlp", "-N", "50", "--abort-on-unavailable-fragment", "--fragment-retries", "3", "--referer", "https://iframe.mediadelivery.net/", url, "-o", filename], check=True)
 
     print(f"Uploading {filename} to Hugging Face dataset Sarkoakram/matozed...")
     api = HfApi()
