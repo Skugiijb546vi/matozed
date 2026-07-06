@@ -1,0 +1,33 @@
+name: Download and Upload Movie
+
+on:
+  workflow_dispatch:
+    inputs:
+      m3u8_url:
+        description: 'M3U8 Stream URL'
+        required: true
+        type: string
+      filename:
+        description: 'Filename (e.g. movie.mp4)'
+        required: true
+        type: string
+
+jobs:
+  download-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install yt-dlp huggingface_hub
+
+      - name: Run script
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python download_upload.py "${{ github.event.inputs.m3u8_url }}" "${{ github.event.inputs.filename }}"
