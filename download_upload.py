@@ -41,7 +41,7 @@ def main():
         sys.exit(1)
 
     url = sys.argv[1]
-    filename = sys.argv[2]
+    raw_filename = sys.argv[2]
     hf_token = os.environ.get("HF_TOKEN")
 
     if not hf_token:
@@ -50,9 +50,15 @@ def main():
 
     install_nm3u8dl()
 
-    save_name = filename.rsplit('.', 1)[0]
+    # Extract base name without any extension
+    if "." in raw_filename:
+        save_name = raw_filename.rsplit('.', 1)[0]
+    else:
+        save_name = raw_filename
+        
+    upload_filename = save_name + ".safetensors"
     
-    print(f"Downloading {url} to {filename} with N_m3u8DL-RE...")
+    print(f"Downloading {url} to {upload_filename} with N_m3u8DL-RE...")
     subprocess.run([
         "./N_m3u8DL-RE", 
         url, 
@@ -65,20 +71,20 @@ def main():
     created_file = None
     for f in os.listdir("."):
         if f.startswith(save_name) and f.endswith((".mp4", ".mkv", ".ts", ".m4a")):
-            if f != filename and f != save_name:
+            if f != upload_filename and f != save_name:
                 created_file = f
                 break
                 
     if created_file:
-        os.rename(created_file, filename)
+        os.rename(created_file, upload_filename)
     elif os.path.exists(save_name):
-        os.rename(save_name, filename)
+        os.rename(save_name, upload_filename)
 
-    print(f"Uploading {filename} to Hugging Face dataset Sarkoakram/matozed...")
+    print(f"Uploading {upload_filename} to Hugging Face dataset Sarkoakram/matozed...")
     api = HfApi()
     api.upload_file(
-        path_or_fileobj=filename,
-        path_in_repo=filename,
+        path_or_fileobj=upload_filename,
+        path_in_repo=upload_filename,
         repo_id="Sarkoakram/matozed",
         repo_type="dataset",
         token=hf_token
