@@ -16,8 +16,8 @@ def main():
         print("HF_TOKEN environment variable is not set!")
         sys.exit(1)
 
-    print(f"Downloading {url} to {filename} with 5 concurrent connections...")
-    subprocess.run(["yt-dlp", "-N", "5", "--socket-timeout", "5", "--abort-on-unavailable-fragment", "--fragment-retries", "3", "--retry-sleep", "fragment:1", "--referer", "https://iframe.mediadelivery.net/", url, "-o", filename], check=True)
+    print(f"Downloading {url} to {filename} with verbose logging (sequential to avoid hanging)...")
+    subprocess.run(["yt-dlp", "-v", "--abort-on-unavailable-fragment", "--fragment-retries", "3", "--retry-sleep", "fragment:1", "--referer", "https://iframe.mediadelivery.net/", url, "-o", filename], check=True)
 
     print(f"Uploading {filename} to Hugging Face dataset Sarkoakram/matozed...")
     api = HfApi()
